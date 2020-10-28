@@ -7,7 +7,9 @@ const
     app = express();
 
 
-
+/**
+ * An array of users
+ */
 let users = [
     {"userId" : "NODE1", "userName" : "MAGiC Node Lab 1", "security" : "ADMIN"},
     {"userId" : "NODE2", "userName" : "MAGiC Node Lab 2", "security" : "ADMIN"},
