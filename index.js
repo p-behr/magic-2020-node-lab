@@ -30,8 +30,8 @@ app.get('/api/user', (req, res) => {
     }
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Content-Type", "application/json");
-    res.json(response);
-})
+    res.status(200).json(response);
+});
 
 
 
