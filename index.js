@@ -18,6 +18,21 @@ let users = [
 
 
 /**
+ * OPTIONS /api/user
+ * Returns the CORS headers for any requested route.
+ * This will allow all CORS requests, from any origin.
+ * Probably not what you want in production!
+ */
+app.options("/*", function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.sendStatus(200);
+});
+
+
+
+/**
  * GET /api/user
  * Returns the list of users
  */
@@ -28,8 +43,8 @@ app.get('/api/user', (req, res) => {
     }
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Content-Type", "application/json");
-    res.json(response);
-})
+    res.status(200).json(response);
+});
 
 
 
