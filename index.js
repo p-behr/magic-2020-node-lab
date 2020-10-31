@@ -71,6 +71,26 @@ app.post('/api/user', (req, res) => {
         "message" : `User ${req.body.userId} has been added`,
         "users" : users
     }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Content-Type", "application/json");
+    res.status(200).json(response);
+});
+
+
+
+/**
+ * DELETE /api/user
+ * Remove a user from the list
+ */
+app.delete('/api/user', (req, res) => {
+    users = users.filter( (user) => user.userId !== req.body.userId );
+    let response = {
+        "success" : true,
+        "message" : `User ${req.body.userId} has been removed`,
+        "users" : users
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Content-Type", "application/json");
     res.status(200).json(response);
 });
 
