@@ -71,6 +71,8 @@ app.post('/api/user', (req, res) => {
         "message" : `User ${req.body.userId} has been added`,
         "users" : users
     }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Content-Type", "application/json");
     res.status(200).json(response);
 });
 
