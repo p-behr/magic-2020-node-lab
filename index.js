@@ -97,6 +97,24 @@ app.delete('/api/user', (req, res) => {
 
 
 /**
+ * PUT /api/user
+ * Update a user
+ */
+app.put('/api/user', (req, res) => {
+    users = users.map( (user) => user.userId !== req.body.userId ? user : req.body );
+    let response = {
+        "success" : true,
+        "message" : `User ${req.body.userId} has been updated`,
+        "users" : users
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Content-Type", "application/json");
+    res.status(200).json(response);
+});
+
+
+
+/**
  * START THE WEBSERVER
  */
 app.listen(port, () => {
