@@ -18,6 +18,14 @@ let users = [
 
 
 /**
+ * express.json() will parse the request body, and add it as an
+ * object onto the request ("req").
+ */
+app.use(express.json());
+
+
+
+/**
  * OPTIONS /api/user
  * Returns the CORS headers for any requested route.
  * This will allow all CORS requests, from any origin.
@@ -43,6 +51,26 @@ app.get('/api/user', (req, res) => {
     }
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Content-Type", "application/json");
+    res.status(200).json(response);
+});
+
+
+
+/**
+ * POST /api/user
+ * Add a new user to the list
+ */
+app.post('/api/user', (req, res) => {
+    users.push({
+        userId: req.body.userId,
+        userName: req.body.userName,
+        security: req.body.security
+    });
+    let response = {
+        "success" : true,
+        "message" : `User ${req.body.userId} has been added`,
+        "users" : users
+    }
     res.status(200).json(response);
 });
 
