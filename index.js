@@ -11,10 +11,10 @@ const
  * An array of users
  */
 let users = [
-    {"userId" : "NODE1", "userName" : "MAGiC Node Lab 1", "security" : "ADMIN"},
-    {"userId" : "NODE2", "userName" : "MAGiC Node Lab 2", "security" : "ADMIN"},
-    {"userId" : "NODE3", "userName" : "MAGiC Node Lab 3", "security" : "ADMIN"},
-    {"userId" : "NODE4", "userName" : "MAGiC Node Lab 4", "security" : "ADMIN"},
+    {"THUSER" : "NODE1", "THNAME" : "MAGiC Node Lab 1", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE2", "THNAME" : "MAGiC Node Lab 2", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE3", "THNAME" : "MAGiC Node Lab 3", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE4", "THNAME" : "MAGiC Node Lab 4", "THSECL" : "ADMIN"},
 ];
 
 
