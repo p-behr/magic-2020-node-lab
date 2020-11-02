@@ -9,17 +9,17 @@ const
 
 
 let users = [
-    {"userId" : "NODE1", "userName" : "MAGiC Node Lab 1", "security" : "ADMIN"},
-    {"userId" : "NODE2", "userName" : "MAGiC Node Lab 2", "security" : "ADMIN"},
-    {"userId" : "NODE3", "userName" : "MAGiC Node Lab 3", "security" : "ADMIN"},
-    {"userId" : "NODE4", "userName" : "MAGiC Node Lab 4", "security" : "ADMIN"},
+    {"THUSER" : "NODE1", "THNAME" : "MAGiC Node Lab 1", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE2", "THNAME" : "MAGiC Node Lab 2", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE3", "THNAME" : "MAGiC Node Lab 3", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE4", "THNAME" : "MAGiC Node Lab 4", "THSECL" : "ADMIN"},
 ];
 
 
 
 /**
- * express.json() will parse the request body, and add it as an
- * object onto the request ("req").
+ * express.json() will parse the request body,
+ * and adds it to the request ("req").
  */
 app.use(express.json());
 
@@ -62,13 +62,13 @@ app.get('/api/user', (req, res) => {
  */
 app.post('/api/user', (req, res) => {
     users.push({
-        userId: req.body.userId,
-        userName: req.body.userName,
-        security: req.body.security
+        THUSER: req.body.THUSER,
+        THNAME: req.body.THNAME,
+        THSECL: req.body.THSECL
     });
     let response = {
         "success" : true,
-        "message" : `User ${req.body.userId} has been added`,
+        "message" : `User ${req.body.THUSER} has been added`,
         "users" : users
     }
     res.header("Access-Control-Allow-Origin", "*");
