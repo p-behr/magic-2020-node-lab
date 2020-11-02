@@ -9,12 +9,11 @@ const
 
 
 let users = [
-    {"userId" : "NODE1", "userName" : "MAGiC Node Lab 1", "security" : "ADMIN"},
-    {"userId" : "NODE2", "userName" : "MAGiC Node Lab 2", "security" : "ADMIN"},
-    {"userId" : "NODE3", "userName" : "MAGiC Node Lab 3", "security" : "ADMIN"},
-    {"userId" : "NODE4", "userName" : "MAGiC Node Lab 4", "security" : "ADMIN"},
+    {"THUSER" : "NODE1", "THNAME" : "MAGiC Node Lab 1", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE2", "THNAME" : "MAGiC Node Lab 2", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE3", "THNAME" : "MAGiC Node Lab 3", "THSECL" : "ADMIN"},
+    {"THUSER" : "NODE4", "THNAME" : "MAGiC Node Lab 4", "THSECL" : "ADMIN"},
 ];
-
 
 
 /**
@@ -62,13 +61,13 @@ app.get('/api/user', (req, res) => {
  */
 app.post('/api/user', (req, res) => {
     users.push({
-        userId: req.body.userId,
-        userName: req.body.userName,
-        security: req.body.security
+        THUSER: req.body.THUSER,
+        THNAME: req.body.THNAME,
+        THSECL: req.body.THSECL
     });
     let response = {
         "success" : true,
-        "message" : `User ${req.body.userId} has been added`,
+        "message" : `User ${req.body.THUSER} has been added`,
         "users" : users
     }
     res.header("Access-Control-Allow-Origin", "*");
@@ -83,10 +82,10 @@ app.post('/api/user', (req, res) => {
  * Remove a user from the list
  */
 app.delete('/api/user', (req, res) => {
-    users = users.filter( (user) => user.userId !== req.body.userId );
+    users = users.filter( (user) => user.THUSER !== req.body.THUSER );
     let response = {
         "success" : true,
-        "message" : `User ${req.body.userId} has been removed`,
+        "message" : `User ${req.body.THUSER} has been removed`,
         "users" : users
     }
     res.header("Access-Control-Allow-Origin", "*");
