@@ -4,16 +4,13 @@ const
 
     //Express is a fast, unopinionated, minimalist web framework
     express = require('express'),
-    app = express();
+    app = express(),
 
-
-
-let users = [
-    {"THUSER" : "NODE1", "THNAME" : "MAGiC Node Lab 1", "THSECL" : "ADMIN"},
-    {"THUSER" : "NODE2", "THNAME" : "MAGiC Node Lab 2", "THSECL" : "ADMIN"},
-    {"THUSER" : "NODE3", "THNAME" : "MAGiC Node Lab 3", "THSECL" : "ADMIN"},
-    {"THUSER" : "NODE4", "THNAME" : "MAGiC Node Lab 4", "THSECL" : "ADMIN"},
-];
+    //node-odbc is an ODBC database interface for Node.js.  It
+    // allows connecting to any database if the system has been
+    // configured correctly.
+    odbc = require('odbc'),
+    dsn = 'DSN=MAGIC';
 
 
 
@@ -45,14 +42,41 @@ app.options("/*", function(req, res, next){
  * Returns the list of users
  */
 app.get('/api/user', (req, res) => {
-    let response = {
-        "success" : true,
-        "users" : users
-    }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Content-Type", "application/json");
-    res.status(200).json(response);
+
+    let response = {}
+
+    odbc.connect(dsn , (connectionError, connection) => {
+        if (connectionError) {
+            response = {
+                "success" : false,
+                "message" : JSON.stringify(connectionError)
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        }
+
+        connection.query('SELECT thuser, thname, thsecl FROM AC2020.DBFAUT0001', (sqlError, result) => {
+            if (sqlError) {
+                response = {
+                    "success" : false,
+                    "message" : JSON.stringify(sqlError)
+                }
+            } else {
+                response = {
+                    "success" : true,
+                    "users" : Array.from(result)
+                }
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        });
+    });
 });
+
 
 
 
@@ -61,19 +85,44 @@ app.get('/api/user', (req, res) => {
  * Add a new user to the list
  */
 app.post('/api/user', (req, res) => {
-    users.push({
-        THUSER: req.body.THUSER,
-        THNAME: req.body.THNAME,
-        THSECL: req.body.THSECL
+
+    let response = {};
+    let inputParms = [
+        req.body.THUSER,
+        req.body.THNAME,
+        req.body.THSECL
+    ]
+
+    odbc.connect(dsn , (connectionError, connection) => {
+        if (connectionError) {
+            response = {
+                "success" : false,
+                "message" : JSON.stringify(connectionError)
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        }
+
+        connection.callProcedure(null, 'AC2020', 'ADD_DBFAUTH', inputParms, (sqlError, result) => {
+            if (sqlError) {
+                response = {
+                    "success" : false,
+                    "message" : JSON.stringify(sqlError)
+                }
+            } else {
+                response = {
+                    "success" : true,
+                    "message" : `User ${req.body.THUSER} has been added by Node.`
+                }
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        });
     });
-    let response = {
-        "success" : true,
-        "message" : `User ${req.body.THUSER} has been added`,
-        "users" : users
-    }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Content-Type", "application/json");
-    res.status(200).json(response);
 });
 
 
@@ -83,16 +132,42 @@ app.post('/api/user', (req, res) => {
  * Remove a user from the list
  */
 app.delete('/api/user', (req, res) => {
-    users = users.filter( (user) => user.THUSER !== req.body.THUSER );
-    let response = {
-        "success" : true,
-        "message" : `User ${req.body.THUSER} has been removed`,
-        "users" : users
-    }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Content-Type", "application/json");
-    res.status(200).json(response);
+
+    let response = {};
+    let inputParms = [req.body.THUSER];
+
+    odbc.connect(dsn , (connectionError, connection) => {
+        if (connectionError) {
+            response = {
+                "success" : false,
+                "message" : JSON.stringify(connectionError)
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        }
+
+        connection.callProcedure(null, 'AC2020', 'DELETE_DBFAUTH', inputParms, (sqlError, result) => {
+            if (sqlError) {
+                response = {
+                    "success" : false,
+                    "message" : JSON.stringify(sqlError)
+                }
+            } else {
+                response = {
+                    "success" : true,
+                    "message" : `User ${req.body.THUSER} has been deleted by Node.`
+                }
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        });
+    });
 });
+
 
 
 
@@ -101,15 +176,44 @@ app.delete('/api/user', (req, res) => {
  * Update a user
  */
 app.put('/api/user', (req, res) => {
-    users = users.map( (user) => user.THUSER !== req.body.THUSER ? user : req.body );
-    let response = {
-        "success" : true,
-        "message" : `User ${req.body.THUSER} has been updated`,
-        "users" : users
-    }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Content-Type", "application/json");
-    res.status(200).json(response);
+
+    let response = {};
+    let inputParms = [
+        req.body.THUSER,
+        req.body.THNAME,
+        req.body.THSECL
+    ]
+
+    odbc.connect(dsn , (connectionError, connection) => {
+        if (connectionError) {
+            response = {
+                "success" : false,
+                "message" : JSON.stringify(connectionError)
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        }
+
+        connection.callProcedure(null, 'AC2020', 'UPDATE_DBFAUTH', inputParms, (sqlError, result) => {
+            if (sqlError) {
+                response = {
+                    "success" : false,
+                    "message" : JSON.stringify(sqlError)
+                }
+            } else {
+                response = {
+                    "success" : true,
+                    "message" : `User ${req.body.THUSER} has been updated by Node.`
+                }
+            }
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Content-Type", "application/json");
+            res.status(200).json(response);
+            return;
+        });
+    });
 });
 
 
