@@ -12,6 +12,14 @@ const
     odbc = require('odbc'),
     dsn = 'DSN=MAGIC';
 
+ 
+
+/**
+ * express.static() will serve static files, such as images and CSS,
+ * from the "public" folder (note: "public" is not part of the URL). 
+ */
+app.use(express.static('public'));
+   
 
 
 /**
