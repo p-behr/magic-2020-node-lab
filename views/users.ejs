@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Users List</title>
+    </head>
+    <body>
+        <h1>Users</h1>
+        <table>
+            <% userList.forEach(function(user){ %>
+                <tr>
+                  <td><%= user.THUSER %></td>
+                  <td><%= user.THNAME %></td>
+                  <td><%= user.THSECL %></td>
+                </tr>
+            <% }); %>
+          </ul>
+    </body>
+</html>

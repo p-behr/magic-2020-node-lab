@@ -12,6 +12,11 @@ const
     odbc = require('odbc'),
     dsn = 'DSN=MAGIC';
 
+
+/**
+ * Set EJS as the view engine
+ */
+app.set('view engine', 'ejs');
  
 
 /**
@@ -29,7 +34,6 @@ app.use(express.static('public'));
 app.use(express.json());
 
 
-
 /**
  * OPTIONS /api/user
  * Returns the CORS headers for any requested route.
@@ -41,6 +45,26 @@ app.options("/*", function(req, res, next){
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
     res.sendStatus(200);
+});
+
+
+
+
+/**
+ * GET /user
+ * Server-rendered list of users 
+ */
+app.get('/user', (req, res) => {
+
+    let users = [
+        {"THUSER" : "NODE1", "THNAME" : "MAGiC Node Lab 1", "THSECL" : "ADMIN"},
+        {"THUSER" : "NODE2", "THNAME" : "MAGiC Node Lab 2", "THSECL" : "ADMIN"},
+        {"THUSER" : "NODE3", "THNAME" : "MAGiC Node Lab 3", "THSECL" : "ADMIN"},
+        {"THUSER" : "NODE4", "THNAME" : "MAGiC Node Lab 4", "THSECL" : "ADMIN"},
+    ];
+
+    res.render('users', { userList: users });
+
 });
 
 
